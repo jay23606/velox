@@ -1373,6 +1373,13 @@ Server-derived from invoice fields. Suppressed for healthy / paid / voided / dra
 
 ## FLOW I6: Email + PDF preview
 
+- [x] **A draft PDF reads as a draft**: download a draft's PDF → a large DRAFT mark, "Status: Draft — not issued" in place of Issued and Due Date, and the footer "Draft preview. This invoice has not been issued and nothing is owed on it yet." *(auto: `TestIssueDateRows_DraftIsNotIssued`, `TestWatermarkFor`)*
+  - Evidence (2026-10-16): VLX-000007 PDF rendered and looked at.
+- [x] **No made-up seller on the PDF**: with Settings → General → company name empty, the invoice and credit-note PDFs print no seller name (not "Velox"); the address and contact lines still print when set. *(auto: `TestSellerName_NeverAPlaceholder`)*
+- [~] **Invoice page warns when the seller is unset**: company name empty → the document shows a "Missing seller details → Settings" chip and the From block reads "No business name set. Add it in Settings…" (never "VELOX" or "Your Company"). *(auto for the rule: `invoiceDocument.test.ts`)*
+  - Evidence (2026-10-16): VLX-000007 (draft, live settings) and VLX-000002 (issued with an empty seller copy), desktop and 390px.
+- [~] **Draft invoice page**: Issued reads "Draft — not issued"; a composed draft's Due reads "—" with "Net 30 from finalizing"; a faint DRAFT mark sits behind the document; the memo shows under a Memo label.
+  - Evidence (2026-10-16): VLX-000007 shows all four.
 - [~] Invoice detail → Email → outbox row → PDF attached → Mailpit shows delivery. *(walked 2026-07-26: NIM-000253.pdf attached, multipart text+HTML, delivered.)*
 - [~] Preview PDF → renders in overlay; close via X / backdrop. *(walked 2026-07-26 — opens in dialog frame, Escape closes.)*
 - [ ] **The whole PDF frame is visible** — the preview iframe ends where the dialog ends, not one header-height past it. Measure rather than eyeball: the iframe's bottom must equal the dialog shell's bottom. *(walked 2026-08-14. This box exists because the box above passed for months while the bottom of the frame was cut off: the iframe was `h-full`, which resolves against the SHELL (85vh) and not against the space left under the 45px header, so it ran exactly one header past the bottom and the shell's `overflow-hidden` ate that strip — the band where a PDF viewer puts its page controls. Measured on the real class list: shell 529px, header 45px, iframe 529px, **45px clipped**; after switching the shell to `flex flex-col` and the iframe to `flex-1 min-h-0`, iframe 484px, **0 clipped**. "It opens and closes" is not the same assertion as "you can see all of it".)*

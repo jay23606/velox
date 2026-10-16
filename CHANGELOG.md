@@ -40,6 +40,7 @@ Older entries keep their original text.
 
 ### Fixed
 
+- **Draft invoices no longer look issued, and no document invents a seller (2026-10-16).** A draft PDF carries a DRAFT mark and "Draft — not issued" instead of issue and due dates. With no company name set, PDFs print no seller name (they printed "Velox"), and the invoice page links to Settings. The page now shows the memo.
 - **Usage event log values have thousands separators (2026-10-15).** "+35000" now reads "+35,000", matching the totals above it; the value is formatted as text, so no digit is lost.
 
 - **Setting a plan's base price to 0 no longer reads "Plan updated" when nothing changed (2026-10-15).** The server keeps the old price when sent 0, so Edit plan now says the price can't go back to 0 and disables Save. The meter page's plan list shows each plan's base price in its own currency.
