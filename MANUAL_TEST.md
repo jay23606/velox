@@ -55,7 +55,7 @@ the canonical source, not a progress tracker.
 `P2` Audit log · `P2A` Audit log — customer-initiated + Tier 2 coverage · `P2B` Operator-side payment-method management · `P3` Usage summary · `P4` Empty billing cycle · `P5` Health checks · `P6` Tax deferral metrics · `REC1` Self-healing background reconcilers
 
 **UI / UX**  
-`U1` Dashboard · `U3` Usage Events page · `U11` Operator search + list filters · `U12` Dashboard consistency sweep · `U7` Edge cases · `U8` Request-ID in error toasts · `U10` Public pages
+`U1` Dashboard · `U3` Usage Events page · `U11` Operator search + list filters · `U12` Dashboard consistency sweep · `U7` Edge cases · `U8` Request-ID in error toasts · `U15` Design foundation · `U10` Public pages
 
 **Tier 3 — Deep / Rare**  
 `X1` RLS multi-tenant isolation · `X2` Bootstrap lockdown · `X2b` Self-host bootstrap → login → live key · `T1` Team invites · `E1` Additional billing emails + credit-note send · `X3` Rate limiting · `X4` Security headers + metrics auth · `X5` PII encryption at rest · `X7` Stripe Tax · `X8` Migration rollback · `X9` Config validation · `X10` OpenTelemetry tracing · `X11` Large batch usage ingestion · `X14` Self-host (Compose) · `CR1` Paid-commit relief · `CG1` Commit / credit-grant burndown · `M1` Provider cost tables + margin · `X15` LiteLLM integration
@@ -2137,6 +2137,14 @@ Setup: ≥26 customers so at least one lands on page 2 (FLOW S1 tenant + a quick
 - [ ] **Trial that cancels free shows no card notice**: a card-less customer's trialing subscription → Cancel → At trial end. The box is **Cancellation scheduled** / "At trial end (<date>); the customer won't be charged." and there is no **No payment method** box or row; the customer page shows the neutral "No payment methods" empty state for it. Control: Undo → **No payment method** returns.
 - [ ] **Item changes follow bill timing**: on an advance-billed subscription, Change plan → tick Change now → "The price difference for the rest of the period is charged or credited now."; Change quantity → "Takes effect now. An increase is charged for the rest of the period; a decrease is credited."; Remove item → "…the unused part of the period is credited." On an arrears-billed one: "The new price applies from now. The period is billed at its end, each part at the plan in effect then.", "Takes effect now. The period is billed at its end, each part at the quantity in effect then." and "Removed mid-period, it is billed at the period end for the days it was on."
 - [ ] **Refusals read plainly**: Change quantity to the current quantity → "That is already the quantity"; `POST /v1/subscriptions/{id}/extend-trial` with a date before the current trial end → 422 "Pick a date after the current trial end. To end the trial sooner, use End trial now."
+
+## FLOW U15: Design foundation
+
+- [ ] **Tall dialogs scroll with pinned actions**: at a 1440×700 window, open Customer → New invoice; the body scrolls and Save/Cancel stay visible at the bottom.
+- [ ] **Date-time field wraps in a dialog on a phone**: at 390px, open Subscription → Extend trial; the time field sits under the date, inside the dialog.
+- [ ] **Sign-in follows dark mode**: set dark mode in the dashboard, sign out; the sign-in page renders dark with no light flash.
+- [ ] **Hosted invoice stays light**: with dark mode set, open an invoice's hosted link; it renders light.
+- [x] **One status vocabulary**: an invoice reads Draft / Open / Past due / Payment failed / Processing / Paid / Void / Uncollectible; codes never show as snake_case. *(auto: `web-v2/tests/statusLabels.test.ts`)*
 
 ## FLOW U8: Request-ID in error toasts
 
