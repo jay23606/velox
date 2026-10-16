@@ -626,6 +626,11 @@ func respondBatchRejected(w http.ResponseWriter, r *http.Request, errStrings []s
 // string. Malformed pairs are an ERROR, never treated-as-absent: the
 // callers 422 so a broken filter can't render unfiltered data as
 // filtered.
+// ParseDimensionsParam parses the `dimensions` query value ("k=v,k2=v2")
+// the same way the list and aggregate endpoints do. Exported for the CSV
+// export, which takes the same filter.
+func ParseDimensionsParam(raw string) (map[string]any, error) { return parseDimensionsParam(raw) }
+
 func parseDimensionsParam(raw string) (map[string]any, error) {
 	raw = strings.TrimSpace(raw)
 	if raw == "" {
