@@ -40,6 +40,7 @@ Older entries keep their original text.
 
 ### Fixed
 
+- **The next-invoice preview prorates like the invoice (2026-10-16).** A calendar first period, an item added mid-period and a quantity change now show prorated base lines ("prorated 19/31 days") instead of the full fee, and usage counts only while its plan was on the subscription. Applies to the subscription page and `create_preview` without a `period`.
 - **Usage event log values have thousands separators (2026-10-15).** "+35000" now reads "+35,000", matching the totals above it; the value is formatted as text, so no digit is lost.
 
 - **Setting a plan's base price to 0 no longer reads "Plan updated" when nothing changed (2026-10-15).** The server keeps the old price when sent 0, so Edit plan now says the price can't go back to 0 and disables Save. The meter page's plan list shows each plan's base price in its own currency.
