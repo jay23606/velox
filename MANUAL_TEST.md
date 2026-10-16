@@ -55,7 +55,7 @@ the canonical source, not a progress tracker.
 `P2` Audit log · `P2A` Audit log — customer-initiated + Tier 2 coverage · `P2B` Operator-side payment-method management · `P3` Usage summary · `P4` Empty billing cycle · `P5` Health checks · `P6` Tax deferral metrics · `REC1` Self-healing background reconcilers
 
 **UI / UX**  
-`U1` Dashboard · `U3` Usage Events page · `U11` Operator search + list filters · `U12` Dashboard consistency sweep · `U7` Edge cases · `U8` Request-ID in error toasts · `U15` Design foundation · `U10` Public pages
+`U1` Dashboard · `U3` Usage Events page · `U11` Operator search + list filters · `U12` Dashboard consistency sweep · `U7` Edge cases · `U8` Request-ID in error toasts · `U15` Design foundation · `U16` App shell · `U10` Public pages
 
 **Tier 3 — Deep / Rare**  
 `X1` RLS multi-tenant isolation · `X2` Bootstrap lockdown · `X2b` Self-host bootstrap → login → live key · `T1` Team invites · `E1` Additional billing emails + credit-note send · `X3` Rate limiting · `X4` Security headers + metrics auth · `X5` PII encryption at rest · `X7` Stripe Tax · `X8` Migration rollback · `X9` Config validation · `X10` OpenTelemetry tracing · `X11` Large batch usage ingestion · `X14` Self-host (Compose) · `CR1` Paid-commit relief · `CG1` Commit / credit-grant burndown · `M1` Provider cost tables + margin · `X15` LiteLLM integration
@@ -2145,6 +2145,13 @@ Setup: ≥26 customers so at least one lands on page 2 (FLOW S1 tenant + a quick
 - [ ] **Sign-in follows dark mode**: set dark mode in the dashboard, sign out; the sign-in page renders dark with no light flash.
 - [ ] **Hosted invoice stays light**: with dark mode set, open an invoice's hosted link; it renders light.
 - [x] **One status vocabulary**: an invoice reads Draft / Open / Past due / Payment failed / Processing / Paid / Void / Uncollectible; codes never show as snake_case. *(auto: `web-v2/tests/statusLabels.test.ts`)*
+
+## FLOW U16: App shell
+
+- [x] **Sidebar and Ctrl+K list the same pages**: every operator route is in the sidebar; Ctrl+K reads the same list (test clocks only in test mode). *(auto: `web-v2/tests/navigation.test.ts`)*
+- [ ] **Setup sits in the sidebar**: no floating pill over page content; the Setup row shows N/5 and opens the checklist beside the sidebar.
+- [ ] **Escape closes the mobile menu**: at 390px, open the menu, press Escape; it closes.
+- [ ] **Ctrl+K finds every page**: type "test" → Test clocks; "provider" → Provider costs; "recipe" → Recipes.
 
 ## FLOW U8: Request-ID in error toasts
 
