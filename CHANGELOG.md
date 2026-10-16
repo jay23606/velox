@@ -40,6 +40,7 @@ Older entries keep their original text.
 
 ### Fixed
 
+- **The customer payment page no longer offers a Pay button that can't work (2026-10-16).** Without Stripe keys it says online payment isn't set up and who to contact; it showed Pay, then "failed to create checkout session". Errors and bad links use customer wording. Pay is full height on phones, and empty sections and repeated totals are gone. API: the public invoice adds `pay_unavailable_reason`.
 - **Draft invoices no longer look issued, and no document invents a seller (2026-10-16).** A draft PDF carries a DRAFT mark and "Draft — not issued" instead of issue and due dates. With no company name set, PDFs print no seller name (they printed "Velox"), and the invoice page links to Settings. The page now shows the memo.
 - **Usage event log values have thousands separators (2026-10-15).** "+35000" now reads "+35,000", matching the totals above it; the value is formatted as text, so no digit is lost.
 
