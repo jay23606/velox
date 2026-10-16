@@ -1248,6 +1248,23 @@ func NewServer(db *postgres.DB, clk clock.Clock, rdb *redis.Client, opts ...Serv
 	membersH := dashmembers.NewHandler(membersSvc, sessionSvc, session.DefaultCookieConfig())
 	membersH.SetAuditLogger(auditLogger)
 
+	// Settings → Email: read-only SMTP status, the link env vars and a test
+	// send to the signed-in member.
+	emailSettingsH := &emailSettingsHandler{
+		sender:             emailSender,
+		links:              emailLinkEnvs(os.Getenv),
+		canEmailSetupLinks: setupLinksEmailable,
+		canSendInvites:     membersSvc.CanInvite(),
+		userEmail: func(ctx context.Context, userID string) (string, error) {
+			u, err := userSvc.GetByID(ctx, userID)
+			if err != nil {
+				return "", err
+			}
+			return u.Email, nil
+		},
+		audit: auditLogger,
+	}
+
 	// HANDLER-level emitters are gated too. They were exempt on the grounds that
 	// they "keep the *audit.Logger concrete type and fail loudly at compile time"
 	// — and both halves of that were false. MOST of them take an INTERFACE
@@ -1657,6 +1674,9 @@ func NewServer(db *postgres.DB, clk clock.Clock, rdb *redis.Client, opts ...Serv
 				"livemode":              auth.Livemode(ctx),
 				"can_email_setup_links": setupLinksEmailable,
 				"can_send_invites":      membersSvc.CanInvite(),
+				// smtp_configured lets any page show one global "email is
+				// off" notice instead of repeating it per record.
+				"smtp_configured": emailSender.IsConfigured(),
 			}
 			if uid := auth.UserID(ctx); uid != "" {
 				out["user_id"] = uid
@@ -1759,6 +1779,7 @@ func NewServer(db *postgres.DB, clk clock.Clock, rdb *redis.Client, opts ...Serv
 		r.With(auth.Require(auth.PermAPIKeyRead)).Mount("/audit-log", auditH.Routes())
 		r.With(auth.Require(auth.PermAPIKeyWrite)).Mount("/settings", settingsH.Routes())
 		r.With(auth.Require(auth.PermAPIKeyWrite)).Mount("/settings/stripe", tenantStripeH.Routes())
+		r.With(auth.Require(auth.PermAPIKeyWrite)).Mount("/settings/email", emailSettingsH.Routes())
 		r.With(auth.Require(auth.PermInvoiceRead)).Mount("/analytics", analyticsH.Routes())
 		r.With(auth.Require(auth.PermTestClockWrite)).Mount("/test-clocks", testClockH.Routes())
 		r.With(auth.Require(auth.PermUsageRead)).Mount("/usage-summary", usageH.SummaryRoutes())
