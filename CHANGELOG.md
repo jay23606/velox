@@ -15,6 +15,10 @@ Older entries keep their original text.
 
 ## [Unreleased]
 
+### Fixed
+
+- **Usage totals follow each meter's aggregation (2026-10-16).** The Usage page summed every reading, so a Maximum meter with 140, 210 and 120 GB showed 470 GB. Each meter now shows its value in its own unit, with a daily line. "Total Units", which added tokens, calls and GB, is gone. API: `GET /v1/usage-events/aggregate` rows gain `value`, `aggregation`, `events`, `customers`, `peak` and `daily`, and it takes `tz`.
+
 ### Changed
 
 - **The sidebar is grouped by task and Setup moved into it (2026-10-16).** Billing, Revenue, Catalog and Developers, with sentence-case labels and one icon per page; Dashboard is now Home and Settings sits at the bottom. Setup progress is a sidebar row instead of a floating pill that covered buttons. Ctrl+K lists every page the sidebar does (it missed four), and Escape closes the mobile menu.
