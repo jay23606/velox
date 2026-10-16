@@ -40,6 +40,7 @@ Older entries keep their original text.
 
 ### Fixed
 
+- **Home trends compare like with like (2026-10-16).** Failed payments compared against 0 and Active customers against a negative baseline. "Customers" now means customers with an active or trialing subscription; the MRR sparkline (drawn from revenue) is gone. API: overview adds `live_customers`, `live_customers_prev`, `failed_payments_prev`; `trialing_subscriptions` counts trialing subscriptions (was always 0).
 - **Usage event log values have thousands separators (2026-10-15).** "+35000" now reads "+35,000", matching the totals above it; the value is formatted as text, so no digit is lost.
 
 - **Setting a plan's base price to 0 no longer reads "Plan updated" when nothing changed (2026-10-15).** The server keeps the old price when sent 0, so Edit plan now says the price can't go back to 0 and disables Save. The meter page's plan list shows each plan's base price in its own currency.
